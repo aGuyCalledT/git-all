@@ -1,22 +1,24 @@
 #!/bin/bash
 
-# Finde den echten Pfad des Skripts, auch wenn es über einen globalen Alias gestartet wird
 SCRIPT_FILE=$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || echo "${BASH_SOURCE[0]}")
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_FILE")" &>/dev/null && pwd)"
 
-# Wenn der Befehl "git-all init" lautet, starte das init-Skript und beende dieses hier
 if [[ "${1,,}" == "init" ]]; then
-    exec "$SCRIPT_DIR/git-all-init.sh"
+    exec "$SCRIPT_DIR/init.sh"
 fi
 
-# Lade die Library
-source "$SCRIPT_DIR/git-all-lib.sh"
+source "$SCRIPT_DIR/lib.sh"
+
+BASE_DIR="${1:-$PWD}"
+BLACKLIST_FILE="$BASE_DIR/.blacklist"
 
 touch "$BLACKLIST_FILE"
 
-echo -e "\nstarting git-sweeper in $GS_BASE_DIR\n"
+echo -e "\nstarting git-all in $BASE_DIR\n"
 
-for dir in "$GS_BASE_DIR"/*/; do
+for dir in "$BASE_DIR"/*/; do
+    [[ ! -d "$dir" ]] && continue
+
     PROJECT_NAME=$(basename "$dir")
 
     [[ "$PROJECT_NAME" == *"*"* ]] && continue
@@ -32,14 +34,13 @@ for dir in "$GS_BASE_DIR"/*/; do
     (
         cd "$dir" || exit
 
-        # Initialization
         if [[ ! -d ".git" ]]; then
-            ask_prompt "not a git repo. initialize? [y/N]: "
+            ask_prompt "not a git repo. initialize? [y/n]: "
             read init_choice
 
             if [[ "${init_choice,,}" =~ ^(y|yes)$ ]]; then
                 git init -b main >/dev/null 2>&1
-                ask_prompt "github visibility? [Private/public]: "
+                ask_prompt "github visibility? [private/public]: "
                 read vis_choice
 
                 VIS_FLAG="--private"
@@ -54,14 +55,12 @@ for dir in "$GS_BASE_DIR"/*/; do
             fi
         fi
 
-        # History
         LAST_COMMIT=$(git log -1 --format="%ar: %s" 2>/dev/null)
         if [[ -n "$LAST_COMMIT" ]]; then
             [[ ${#LAST_COMMIT} -gt 55 ]] && LAST_COMMIT="${LAST_COMMIT:0:52}..."
             print_msg "${GRAY} last: $LAST_COMMIT${NC}"
         fi
 
-        # Commit logic
         CHANGES_MADE=false
         if [[ -n "$(git status --porcelain)" ]]; then
             ask_prompt "enter commit message [auto commit]: "
@@ -75,7 +74,6 @@ for dir in "$GS_BASE_DIR"/*/; do
             print_msg "󰘬 no changes to commit."
         fi
 
-        # Push logic
         BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
         AHEAD_CHECK=$(git status -sb 2>/dev/null | grep -o 'ahead [0-9]\+')
         MISSING_UPSTREAM=$(git config --get branch.${BRANCH}.remote)
@@ -104,7 +102,6 @@ for dir in "$GS_BASE_DIR"/*/; do
 
     draw_bottom
 
-    # Link output
     REPO_URL=$(cd "$dir" && get_clean_url)
     [[ -n "$REPO_URL" ]] && echo -e "   ${GRAY} $REPO_URL${NC}\n" || echo ""
 
