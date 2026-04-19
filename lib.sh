@@ -2,12 +2,14 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 CONFIG_FILE="$SCRIPT_DIR/git-all.conf"
+BLACKLIST_FILE="$SCRIPT_DIR/blacklist"
 
 [[ -f "$CONFIG_FILE" ]] && source "$CONFIG_FILE"
 
 : "${GS_GITHUB_USER:=$(git config user.name || echo 'aGuyCalledT')}"
 : "${GS_DRAW_WIDTH:=65}"
 : "${GS_CORNER_STYLE:=sharp}"
+: "${GS_BASE_DIRS:=$HOME/git}"
 
 GREEN=$'\e[0;32m'
 RED=$'\e[0;31m'
