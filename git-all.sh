@@ -10,7 +10,7 @@ init)
     exec "$SCRIPT_DIR/init.sh"
     ;;
 blacklist)
-    ${EDITOR:-nano} "$BLACKLIST_FILE"
+    ${EDITOR:-nvim} "$BLACKLIST_FILE"
     exit 0
     ;;
 esac
