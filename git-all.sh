@@ -54,8 +54,10 @@ for base in $GS_BASE_DIRS; do
                     VIS_FLAG="--private"
                     [[ "${vis_choice,,}" == "public" ]] && VIS_FLAG="--public"
 
-                    print_msg " creating github repository..."
+                    print_msg "creating github repository..."
                     gh repo create "$PROJECT_NAME" $VIS_FLAG --source=. --remote=origin >/dev/null 2>&1
+                    print_msg " $GS_GITHUB_USER/$PROJECT_NAME"
+
                 else
                     echo "$ABS_PATH" >>"$BLACKLIST_FILE"
                     print_msg " blacklisted."
@@ -80,13 +82,13 @@ for base in $GS_BASE_DIRS; do
 
                     git add .
                     git commit -m "${msg_choice:-auto commit}" >/dev/null
-                    print_msg "󱓌 changes committed."
+                    print_msg "󱓎 changes committed."
                     CHANGES_MADE=true
                 else
-                    print_msg "󰜺 commit skipped."
+                    print_msg "󱓋 commit skipped."
                 fi
             else
-                print_msg "󰘬 no changes to commit."
+                print_msg "󱓏 no changes to commit."
             fi
 
             BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
@@ -97,7 +99,7 @@ for base in $GS_BASE_DIRS; do
                 PUSH_OUT=$(git push origin "$BRANCH" 2>&1)
 
                 if [[ $? -ne 0 ]]; then
-                    print_error_wrapped "󱓎 push failed: " "$(extract_error "$PUSH_OUT")"
+                    print_error_wrapped "󱓌 push failed: " "$(extract_error "$PUSH_OUT")"
 
                     if ! git push -u origin "$BRANCH" >/dev/null 2>&1; then
                         git pull --rebase origin "$BRANCH" >/dev/null 2>&1
