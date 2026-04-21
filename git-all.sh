@@ -18,7 +18,7 @@ esac
 touch "$BLACKLIST_FILE"
 
 for base in $GS_BASE_DIRS; do
-    eval base_path="$base"
+    base_path="${base/#\~/$HOME}"
     [[ ! -d "$base_path" ]] && continue
 
     echo -e "\nstarting git-all in $base_path\n"
