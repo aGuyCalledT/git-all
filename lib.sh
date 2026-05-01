@@ -29,7 +29,7 @@ else
 fi
 
 draw_top() {
-    local title=" $1 "
+    local title="   $1 "
     local border_line
     printf -v border_line "%$((GS_DRAW_WIDTH - 2 - ${#title}))s" ""
     echo -e "${GREEN}${C_TL}${title}${border_line// /─}${C_TR}${NC}"
