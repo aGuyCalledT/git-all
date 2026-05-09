@@ -120,7 +120,7 @@ for base in $GS_BASE_DIRS; do
         draw_bottom
 
         REPO_URL=$(cd "$dir" && get_clean_url)
-        [[ -n "$REPO_URL" ]] && echo -e "   ${GRAY} $REPO_URL${NC}\n" || echo ""
+        [[ -n "$REPO_URL" ]] && echo -e "${GRAY} $REPO_URL${NC}\n" || echo ""
     done
 done
 
