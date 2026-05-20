@@ -17,19 +17,23 @@ GRAY=$'\e[90m'
 NC=$'\e[0m'
 
 if [[ "$GS_CORNER_STYLE" == "rounded" ]]; then
-    C_TL="╭"
+    #C_TL="╭"
+    C_TL="├"
     #C_TR="╮"
     C_TR=" "
-    C_BL="╰"
+    #C_BL="╰"
+    C_BL="├"
     #C_BR="╯"
     C_BR=" "
 else
-    C_TL="┌"
+    #C_TL="┌"
+    C_TL="├"
     #C_TR="┐"
-    C_TR=" "
-    C_BL="└"
+    C_TR="┤"
+    #C_BL="└"
+    C_BL="├"
     #C_BR="┘"
-    C_BR=" "
+    C_BR="┤ "
 fi
 
 draw_top() {
