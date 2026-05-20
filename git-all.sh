@@ -82,13 +82,13 @@ for base in $GS_BASE_DIRS; do
 
                     git add .
                     git commit -m "${msg_choice:-auto commit}" >/dev/null
-                    print_msg "󱓎 changes committed."
+                    print_msg " changes committed."
                     CHANGES_MADE=true
                 else
-                    print_msg "󱓋 commit skipped."
+                    print_msg "󰒭 commit skipped."
                 fi
             else
-                print_msg "󱓏 no changes to commit."
+                print_msg "󰇘 no changes to commit."
             fi
 
             BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
@@ -110,9 +110,9 @@ for base in $GS_BASE_DIRS; do
                             exit 1
                         fi
                     fi
-                    print_msg " synchronized!"
+                    print_msg " synchronized!"
                 elif ! echo "$PUSH_OUT" | grep -q "Everything up-to-date"; then
-                    print_msg " synchronized!"
+                    print_msg " synchronized!"
                 fi
             fi
         )
