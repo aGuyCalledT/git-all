@@ -18,14 +18,18 @@ NC=$'\e[0m'
 
 if [[ "$GS_CORNER_STYLE" == "rounded" ]]; then
     C_TL="╭"
-    C_TR="╮"
+    #C_TR="╮"
+    C_TR=" "
     C_BL="╰"
-    C_BR="╯"
+    #C_BR="╯"
+    C_BR=" "
 else
     C_TL="┌"
-    C_TR="┐"
+    #C_TR="┐"
+    C_TR=" "
     C_BL="└"
-    C_BR="┘"
+    #C_BR="┘"
+    C_BR=" "
 fi
 
 draw_top() {
@@ -57,7 +61,8 @@ print_msg() {
 
     local padding
     printf -v padding "%${pad_len}s" ""
-    echo -e "${GREEN}│${NC}  $1${padding}${GREEN}│${NC}"
+    #echo -e "${GREEN}│${NC}  $1${padding}${GREEN}│${NC}"
+    echo -e "${GREEN}│${NC}  $1${padding}${GREEN} ${NC}"
 }
 
 ask_prompt() {
